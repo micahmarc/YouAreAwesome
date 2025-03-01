@@ -8,12 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
-    
-    
-    @State private var messageString = ""
+    @State private var message = ""
     @State private var imageName: String = ""
-    @State private var imageNumber = 0
-    @State private var messageNumber = 0
+    @State private var lastMessageNumber = -1 // lastMessageNumber will never be -1
+    @State private var lastImageNumber = -1
     
     var body: some View {
         VStack {
@@ -27,7 +25,7 @@ struct ContentView: View {
             
             Spacer()
                         
-            Text(messageString)
+            Text(message)
                 .font(.largeTitle)
                 .fontWeight(.heavy)
                 .minimumScaleFactor(0.5)
@@ -44,12 +42,30 @@ struct ContentView: View {
                                     "You Are Great",
                                     "You Are Fantastic!",
                                     "Fabulous?, That's You!",]
-                    messageString = messages[Int.random(in: 0...messages.count-1)]
+                    
+                    //generate a random messageNumber to use as an index
+                    //if messageNumber == lastMessageNumber {
+                    //  keep generating a new messageNumber
+                    //  until you get a messageNumber != lastMessageNumber
+                    //set messageString to messages[messagesNumber]
+                    //update the lastMessageNumber with messageNumber
+                    
+                    var messageNumber: Int
+                    repeat {
+                        messageNumber = Int.random(in: 0...messages.count-1)
+                    } while messageNumber == lastMessageNumber
                 
+                    message = messages[messageNumber]
+                    lastMessageNumber = messageNumber
                     
+                    var imageNumber = Int.random(in: 0...9)
+                    while imageNumber == lastImageNumber {
+                        imageNumber = Int.random(in: 0...9)
+                    }
                     
-                    imageName = "image\(Int.random(in: 0...9))"
-                    print(imageNumber)
+                    imageName = "image\(imageNumber)"
+                    lastImageNumber = imageNumber
+                    
                 }
                 .buttonStyle(.borderedProminent)
             }
@@ -57,8 +73,6 @@ struct ContentView: View {
             
         }
     }
-
-
 
 #Preview {
     ContentView()
